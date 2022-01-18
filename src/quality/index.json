@@ -1,0 +1,82 @@
+{
+    "quality":{
+        
+        "1":{
+            "value": "curiosity",
+                "label": "Curiosity",
+                "id":"1"},
+
+
+        "2":{
+            "value": "autonomy",
+                "label": "Autonomy",
+                "id":"2"},
+
+
+        "3":{
+            "value": "take initiatives",
+                "label": "Take initiatives",
+                "id":"3"},
+        
+        "4":{
+            "value": "hunger for knowledge",
+                "label": "Hunger for knowledge",
+                "id":"4"},
+        
+        "5":{
+            "value": "coffee addict",
+                "label": "Coffee addict",
+                "id":"5"},
+      
+        "6":{
+            "value": "play video games",
+                "label": "Play video games",
+                "id":"6"},
+        
+        "7":{
+            "value": "play video games at work",
+                "label": "Play video games at work",
+                "id":"7"},
+        
+        "8":{
+            "value": "back problems",
+                "label": "Back problems",
+                "id":"8"},
+        
+        "9":{
+            "value": "have a cat",
+                "label": "Have a cat",
+                "id":"9"},
+        
+        "10":{
+            "value": "versatile",
+                "label": "Versatile",
+                "id":"10"},
+        
+        "11":{
+            "value": "funny",
+                "label": "Funny",
+                "id":"11"},
+        
+        "12":{
+            "value": "teamwork",
+                "label": "Teamwork",
+                "id":"12"},
+        
+        "13":{
+            "value": "reachable",
+                "label": "Reachable",
+                "id":"13"},
+        
+        "14":{
+            "value": "know a lot of meme",
+                "label": "Know a lot of meme",
+                "id":"14"},
+        
+        "15":{
+            "value": "sleeping during meetings",
+                "label": "Sleeping during meetings",
+                "id":"15"}
+        
+        }
+    }
