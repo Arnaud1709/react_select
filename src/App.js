@@ -1,15 +1,8 @@
-import logo from './logo.svg';
 import './App.css';
 import React, {useEffect, useState} from 'react';
 import Select from 'react-select'
-import makeAnimated from 'react-select/animated';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { render } from '@testing-library/react';
-
-
-
-
 
 function App(){
 
@@ -36,9 +29,10 @@ function App(){
   const [ matchCount, setMatchCount ] = useState(0);
   const [ catPerson, setCatPerson ] = useState(false);
   const [ culturePerson, setCulturePerson ] = useState(0);
+  const [ memePerson, setMemePerson] = useState(false);
 
-  const goodDevQualities = [1, 2, 3, 4, 10, 12, 13];
-  const badDevQualities = [6, 7, 11, 15];
+  const goodDevQualities = [1, 2, 3, 4, 6, 10, 12, 13];
+  const badDevQualities = [7, 11, 15];
   let qualityCheck;
     
   const checkValue = (arr1, arr2) => arr2.filter(element => arr1.includes(element.id));
@@ -55,6 +49,9 @@ function App(){
         setCatPerson(true);
         culture = [...culture, true]
       }
+      if (element.id === 14){
+        setMemePerson(true);
+      }
 
       if (element.id === 6) {
         culture = [...culture, true]
@@ -63,6 +60,7 @@ function App(){
       if (element.id === 5) {
         culture = [...culture, true]
       }
+
       if(index === 0) {
         characteristics = element.label + connector;
       } else {
@@ -96,10 +94,6 @@ function App(){
   // special (id - 9) - Perfect !
 
 
-  if (matchCount <= -4) {
-    qualityCheck = <p>Stop it, get some help !</p>;
-  }
-
   if (matchCount === -3) {
     qualityCheck = <p>Nope ! Nope ! OMG !</p>;
   }
@@ -113,15 +107,27 @@ function App(){
   }
 
   if (matchCount === 0) {
-    qualityCheck = <p>Neutral !</p>;
+    qualityCheck = <p>Tell me your qualities !</p>;
   }
 
-  if (matchCount === 1 ) {
+  if (matchCount >= 1 ) {
+    qualityCheck = <p>And ?</p>;
+  }
+
+  if (matchCount === 8 ) {
+    qualityCheck = <p>Yup, nice dev bro !</p>;
+  }
+
+  if (matchCount === -3 && memePerson) {
+    qualityCheck = <p>Stop it, get some help !</p>;
+  }
+
+  if (matchCount === 8 && memePerson ) {
     qualityCheck = <p>Okey ! Okey ! It's happenning !</p>;
   }
 
-  if (matchCount >= 2 ) {
-    qualityCheck = <p>Yup, nice dev bro !</p>;
+  if (matchCount === 0 && memePerson) {
+    qualityCheck = <p>*plop* Noïce !</p>
   }
 
   if (catPerson) {
@@ -149,9 +155,9 @@ function App(){
       onChange={handleChange}
     />
 
-    <div style={{color: '#555', margin: '10px'}}>
+    {/* <div style={{color: '#555', margin: '10px'}}>
       <span>{devCharacteristics}</span>
-    </div>
+    </div> */}
 
     <button className='response' onClick={notify}>I'm a good dev ?</button>
 
