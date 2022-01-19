@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
 import { ToastContainer, toast } from 'react-toastify';
@@ -13,7 +13,7 @@ import { render } from '@testing-library/react';
 
 function App(){
 
-  const quality = [
+  const qualityArray = [
     {value: 'curiosity', label: 'Curiosity', id: 1},
     {value: 'autonomy', label: 'Autonomy', id: 2},
     {value: 'take initiatives', label: 'Take initiatives', id: 3},
@@ -31,70 +31,109 @@ function App(){
     {value: 'sleeping during meetings', label: 'Sleeping during meetings', id: 15 },
   ];
 
-  const qualityIds = quality.map(item => (item.id))
+  const [ qualities, setQuality ] = useState([]);
+  const [ devCharacteristics, setDevChar ] = useState('');
+  const [ matchCount, setMatchCount ] = useState(0);
+  const [ catPerson, setCatPerson ] = useState(false);
+  const [ culturePerson, setCulturePerson ] = useState(0);
 
-  const [result,setResult]=useState([]);
-  
-  const checkValue = (arr, target) => target.every(v => arr.includes(v));
+  const goodDevQualities = [1, 2, 3, 4, 10, 12, 13];
+  const badDevQualities = [6, 7, 11, 15];
+  let qualityCheck;
+    
+  const checkValue = (arr1, arr2) => arr2.filter(element => arr1.includes(element.id));
 
-  const handleChange = e => {
-    const targetIds = e.map(item => (item.id))
-    setResult(targetIds)
+  const handleChange = selectedTraits => {
+
+    let characteristics = '';
+    let culture = []
+    
+    setQuality(selectedTraits)
+    selectedTraits.forEach((element, index) => {
+      const connector = index === selectedTraits.length - 1 ? '' : ', ';
+      if (element.id === 9) {
+        setCatPerson(true);
+        culture = [...culture, true]
+      }
+
+      if (element.id === 6) {
+        culture = [...culture, true]
+      }
+
+      if (element.id === 5) {
+        culture = [...culture, true]
+      }
+      if(index === 0) {
+        characteristics = element.label + connector;
+      } else {
+        characteristics = characteristics + element.label + connector ;
+      }
+    });
+    setDevChar(characteristics);
+    
+    setCulturePerson(culture.length);
+
   };
-  
-  var qualityCheck;
-    if
-        (
-          checkValue([7], result) || 
-          checkValue([11], result) ||
-          checkValue([15], result)
-        ){
-        qualityCheck = <p>Nope !</p>;
-      }
-      else if
-        (
-          (checkValue([7], result) &&
-          checkValue([11], result)) ||
-          (checkValue([11], result) &&
-          checkValue([15], result)) ||
-          (checkValue([7], result) &&
-          checkValue([15], result))
-          ){
-        qualityCheck = <p>Nope ! Nope !</p>;
-      }
-      else if
-        (result === 7, 11, 15){
-        qualityCheck = <p>Nope ! Nope ! OMG !</p>
-      }
-      else if
-        (result === 7, 14 && 11, 14 && 14, 15 && 7, 11, 14 && 7, 14, 15 && 11, 14, 15 && 7, 11, 14, 15){
-        qualityCheck = <p>Stop it, get some help</p>;
-      }
-      else if
-        (checkValue([9], result)){
-        qualityCheck = <p>Perfect.</p>;
-      }
-      else if
-        (result === 1, 2, 3, 4, 5, 6, 9, 10, 12, 13, 14){
-        qualityCheck = <p>Okey ! Okey ! It's happenning !</p>;
-      }
-      else if
-        (result === 1, 2, 3, 4, 5, 6, 10, 12, 13){
-        qualityCheck = <p>Yup, nice dev bro !</p>;
-      }
-      else if
-        (result === 1, 2, 3, 4, 5, 6, 9, 10, 12, 13){
-        qualityCheck = <p>Yup, nice dev bro !</p>;
-      }
-      else if
-      (result === 5, 6, 9){
-        qualityCheck = <p>Oh, I see... A person of culture</p>;
-      }
-    else{
-      qualityCheck = <p>Tell me what are the qualities of a good developer</p>;
-    }
 
-    const notify = () => toast(<span>{qualityCheck}</span>);
+
+  useEffect(() => {
+      const goodCount = checkValue(goodDevQualities, qualities).length
+      const badCount = checkValue(badDevQualities, qualities).length
+      setMatchCount(goodCount - badCount)
+      console.log({matchCount, goodCount, badCount})
+  }, [qualities, matchCount])
+
+
+  // Match Count Criteria
+  // -4 - Stop it, get some help
+  // -3 - Nope ! Nope ! OMG !
+  // -2 - Nope ! Nope !
+  // -1 - Nope !
+  // 0 - neutral
+  // 1 - Okey ! Okey ! It's happenning !
+  // 1+ - Yup, nice dev bro !
+  // special (id - 5, 6, 9) - Oh, I see... A person of culture
+  // special (id - 9) - Perfect !
+
+
+  if (matchCount <= -4) {
+    qualityCheck = <p>Stop it, get some help !</p>;
+  }
+
+  if (matchCount === -3) {
+    qualityCheck = <p>Nope ! Nope ! OMG !</p>;
+  }
+
+  if (matchCount === -2) {
+    qualityCheck = <p>Nope ! Nope !</p>;
+  }
+
+  if (matchCount === -1) {
+    qualityCheck = <p>Nope !</p>;
+  }
+
+  if (matchCount === 0) {
+    qualityCheck = <p>Neutral !</p>;
+  }
+
+  if (matchCount === 1 ) {
+    qualityCheck = <p>Okey ! Okey ! It's happenning !</p>;
+  }
+
+  if (matchCount >= 2 ) {
+    qualityCheck = <p>Yup, nice dev bro !</p>;
+  }
+
+  if (catPerson) {
+    qualityCheck = <p>Perfect !</p>;
+  }
+
+  if (culturePerson === 3) {
+    qualityCheck = <p>Oh, I see... A person of culture</p>;
+  }
+    
+    
+  const notify = () => toast(<span>{qualityCheck}</span>);
 
   return (
     <div>
@@ -103,14 +142,17 @@ function App(){
       className='selector'
       multiple={true}
       closeMenuOnSelect={false}
-      options={quality}
+      options={qualityArray}
       isClearable
       isSearchable
       isMulti
       onChange={handleChange}
     />
 
-    <h1>{result}</h1>
+    <div style={{color: '#555', margin: '10px'}}>
+      <span>{devCharacteristics}</span>
+    </div>
+
     <button className='response' onClick={notify}>I'm a good dev ?</button>
 
     <ToastContainer
